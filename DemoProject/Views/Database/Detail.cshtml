@@ -1,0 +1,39 @@
+﻿@model DatabaseDetailModel
+@{
+    ViewData["Title"] = "Database Detail";
+}
+
+<head>
+    <style>
+        td, th
+        {
+            padding-left:10px;
+            padding-right:10px
+        }
+    </style>
+</head>
+
+<h1>@Model.Person.FirstName @Model.Person.LastName</h1>
+<table>
+    <tr>
+        <th>Emails</th>
+        <th>Phone Numbers</th>
+    </tr>
+    @for (int i = 0; i <= (Model.EmailAddresses.Count() >= Model.PhoneNumbers.Count() ? Model.EmailAddresses.Count() : Model.PhoneNumbers.Count()); i++)
+    {
+        <tr>
+            <td>
+                @if (i < Model.EmailAddresses.Count())
+                {
+                    @Model.EmailAddresses[i].Email;
+                }
+            </td>
+            <td>
+                @if (i < Model.PhoneNumbers.Count())
+                {
+                    @Model.PhoneNumbers[i].Number;
+                }
+            </td>
+        </tr>
+    }
+</table>

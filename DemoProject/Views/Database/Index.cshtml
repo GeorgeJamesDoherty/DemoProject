@@ -1,0 +1,34 @@
+﻿@model DatabaseIndexModel
+@{
+    ViewData["Title"] = "Database Entries";
+}
+<head>
+    <style>
+        table, tbody, th, td, tr {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+@Html.Partial("Message")
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+    </tr>
+    <tbody>
+        @{ foreach (var person in Model.people)
+            {
+                <tr>
+                    <td>@person.Id</td>
+                    <td>@person.FirstName</td>
+                    <td>@person.LastName</td>
+                    <td><a asp-controller="Database" asp-action="Detail" asp-route-personId="@person.Id">Detail</a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<a asp-controller="DataBase" asp-action="Add">Add a new person here</a>

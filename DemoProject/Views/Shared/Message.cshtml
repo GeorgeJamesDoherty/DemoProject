@@ -1,0 +1,8 @@
+﻿@if (!String.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+{
+    <div class="alert alert-danger">@Html.Raw(TempData["ErrorMessage"].ToString())</div>
+}
+@if (!String.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+{
+    <div class="alert alert-success">@Html.Raw(TempData["SuccessMessage"].ToString())</div>
+}

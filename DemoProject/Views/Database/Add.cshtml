@@ -1,0 +1,18 @@
+﻿@model DatabaseDetailModel
+@{
+    ViewData["Title"] = "Add Person";
+}
+
+<h1>View</h1>
+
+<h1> Add someone! </h1>
+@using (Html.BeginForm("Add", "Database", FormMethod.Post))
+{
+<form>
+    <div>
+        @Html.TextBoxFor(x => x.Person.FirstName)
+        @Html.TextBoxFor(x => x.Person.LastName)
+    </div>
+    <button type="submit" value="Submit">Add!</button>
+</form>
+}
