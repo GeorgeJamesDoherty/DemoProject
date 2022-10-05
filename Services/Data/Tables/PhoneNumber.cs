@@ -1,19 +1,22 @@
-﻿using System;
+﻿using DemoProject.Services.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DemoProject.Services.Data.Tables
 {
-    public class PhoneNumber
+    public class PhoneNumber : ContactInfoBase
     {
-        public int Id { get; set; }
+        public PhoneNumber() { }
 
-        public int PersonId { get; set; }
+        public PhoneNumber(ContactInfoBase contactInfoBase)
+        {
+            Id = contactInfoBase.Id;
+            PersonId = contactInfoBase.PersonId;
+            IsActive = contactInfoBase.IsActive;
+            DateAdded = contactInfoBase.DateAdded;
+        }
 
         public string Number { get; set; }
-
-        public bool IsActive { get; set; }
-
-        public DateTime DateAdded { get; set; }
     }
 }

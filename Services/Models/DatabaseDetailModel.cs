@@ -10,5 +10,9 @@ namespace DemoProject.Services.Models
         public List<EmailAddress> EmailAddresses { get; set; }
 
         public List<PhoneNumber> PhoneNumbers { get; set; }
+
+        public string NewEmailAddress { get; set; }
+
+        public string NewPhoneNumber { get; set; }
     }
 }

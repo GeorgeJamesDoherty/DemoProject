@@ -1,20 +1,22 @@
-﻿using System;
+﻿using DemoProject.Services.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DemoProject.Services.Data.Tables
 {
-    public class EmailAddress
+    public class EmailAddress : ContactInfoBase
     {
-        public int Id { get; set; }
+        public EmailAddress() { }
 
-        public int PersonId { get; set; }
+        public EmailAddress(ContactInfoBase contactInfoBase)
+        {
+            Id = contactInfoBase.Id;
+            PersonId = contactInfoBase.PersonId;
+            IsActive = contactInfoBase.IsActive;
+            DateAdded = contactInfoBase.DateAdded;
+        }
 
         public string Email { get; set; }
-
-        public bool IsActive { get; set; }
-
-        public DateTime DateAdded { get; set; }
-
     }
 }
