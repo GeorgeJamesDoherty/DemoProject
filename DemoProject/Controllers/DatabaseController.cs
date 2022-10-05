@@ -1,15 +1,12 @@
 ﻿using DemoProject.Services.Models;
 using DemoProject.Services.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DemoProject.Controllers
 {
     public class DatabaseController : Controller
     {
+        private const string PersonStr = "Person";
 
         private readonly DatabaseServices _databaseServices;
 
@@ -48,6 +45,25 @@ namespace DemoProject.Controllers
                 TempData["ErrorMessage"] = "Failed To Add Person, Please Try Again";
             }
             return RedirectToAction("Index"); 
+        }
+
+        public IActionResult AddContact(DatabaseDetailModel model)
+        {
+            _databaseServices.AddContact(model);
+            return RedirectToAction("Detail", new { personId = model.Person.Id });
+        }
+
+        public IActionResult Delete(string type, int id, int? personId)
+        {
+            var success = _databaseServices.Delete(type, id);
+            if (type == PersonStr)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {               
+                return RedirectToAction("Detail", new { personId = personId });
+            }
         }
     }
 }

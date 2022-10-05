@@ -8,11 +8,82 @@
 <h1> Add someone! </h1>
 @using (Html.BeginForm("Add", "Database", FormMethod.Post))
 {
-<form>
-    <div>
-        @Html.TextBoxFor(x => x.Person.FirstName)
-        @Html.TextBoxFor(x => x.Person.LastName)
-    </div>
-    <button type="submit" value="Submit">Add!</button>
-</form>
+    <form>
+        <div>
+            <table>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                </tr>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.TextBoxFor(x => x.Person.FirstName, new { required = "required" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(x => x.Person.LastName, new { required = "required" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <table id="ContactTable">
+            <tr>
+                <th>Emails</th>
+                <th>Phone Numbers</th>
+            </tr>
+            <tr>
+                <td id="Email0">
+                    @Html.TextBoxFor(x => x.EmailAddresses[0].Email, new { @onchange = "updateTable(this, 'E')" })
+                </td>
+                <td id="Number0">
+                    @Html.TextBoxFor(x => x.PhoneNumbers[0].Number, new { @onchange = "updateTable(this, 'N')" })
+                </td>
+            <tr>
+        </table>
+        <button type="submit" value="Submit">Add!</button>
+    </form>
+}
+
+@section Scripts{
+    <script type="text/javascript">
+        var currRow = 1;
+        var currEmailRow = 1;
+        var currMobileRow = 1;
+        var contactTable = document.getElementById("ContactTable");
+        function updateTable(element, type) {
+            if (type == 'N' && currEmailRow > currMobileRow) {
+                document.getElementById("Number" + currMobileRow).innerHTML = '<input id="PhoneNumbers_' + currMobileRow +
+                    '__Number" name="PhoneNumbers[' + currMobileRow + '].Number" onchange="updateTable(this, \'N\')" type="text" value="">';
+                currMobileRow++;
+            }
+            else if (type == 'E' && currMobileRow > currEmailRow) {
+                document.getElementById("Email" + currEmailRow).innerHTML = '<input id="PhoneNumbers_' + currEmailRow +
+                    '__Number" name="PhoneNumbers[' + currEmailRow + '].Number" onchange="updateTable(this, \'E\')" type="text" value="">';
+                currEmailRow++;
+            }
+            else {
+                var contactRow = contactTable.insertRow();
+                var emailCell = contactRow.insertCell(0);
+                emailCell.id = "Email" + currRow
+                var mobileCell = contactRow.insertCell(1);
+                mobileCell.id = "Number" + currRow
+                if (type == 'N') {
+
+                    mobileCell.innerHTML = '<input id="PhoneNumbers_' + currRow + '__Number" name="PhoneNumbers[' +
+                        currRow + '].Number" onchange="updateTable(this, \'N\')" type="text" value="">';
+                    currMobileRow++;
+                }
+                else {
+
+                    emailCell.innerHTML = '<input id="EmailAddresses_' + currRow + '__Email" name="EmailAddresses[' +
+                        currRow + '].Email" onchange="updateTable(this, \'E\')" type="text" value="">';
+                    currEmailRow++;
+                }
+                currRow++;
+            }
+            element.setAttribute('onChange', '');
+        }
+    </script>
 }

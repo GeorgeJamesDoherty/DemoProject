@@ -11,5 +11,9 @@ namespace DemoProject.Services.Data.Tables
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public List<EmailAddress> EmailAddresses { get; set; }
+
+        public List<PhoneNumber> PhoneNumbers { get; set; }
     }
 }

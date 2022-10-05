@@ -5,10 +5,21 @@
 
 <head>
     <style>
-        td, th
-        {
-            padding-left:10px;
-            padding-right:10px
+        td, th {
+            padding-left: 10px;
+            padding-right: 10px
+        }
+
+        input {
+            width: 100%
+        }
+
+        button {
+            border-radius: 8px;
+            color: #333333;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-weight: 500;
+            line-height: 20px;
         }
     </style>
 </head>
@@ -16,24 +27,58 @@
 <h1>@Model.Person.FirstName @Model.Person.LastName</h1>
 <table>
     <tr>
-        <th>Emails</th>
-        <th>Phone Numbers</th>
+        <th colspan="2">Emails</th>
+        <th colspan="2">Phone Numbers</th>
     </tr>
     @for (int i = 0; i <= (Model.EmailAddresses.Count() >= Model.PhoneNumbers.Count() ? Model.EmailAddresses.Count() : Model.PhoneNumbers.Count()); i++)
     {
         <tr>
-            <td>
-                @if (i < Model.EmailAddresses.Count())
-                {
-                    @Model.EmailAddresses[i].Email;
-                }
-            </td>
-            <td>
-                @if (i < Model.PhoneNumbers.Count())
-                {
-                    @Model.PhoneNumbers[i].Number;
-                }
-            </td>
+            @if (i < Model.EmailAddresses.Count())
+            {
+                <td>
+                    @Model.EmailAddresses[i].Email
+                </td>
+                <td>
+                    <a asp-controller="Database" asp-action="Delete" asp-route-type="Email" asp-route-id="@Model.EmailAddresses[i].Id"
+                       asp-route-personId="@Model.Person.Id">Delete</a>
+                </td>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+            }
+            @if (i < Model.PhoneNumbers.Count())
+            {
+                <td>
+                    @Model.PhoneNumbers[i].Number
+                </td>
+                <td>
+                    <a asp-controller="Database" asp-action="Delete" asp-route-type="Number" asp-route-id="@Model.PhoneNumbers[i].Id"
+                       asp-route-personId="@Model.Person.Id">Delete</a>
+                </td>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+            }
         </tr>
     }
+<tr>
+    @using (Html.BeginForm("AddContact", "Database", FormMethod.Post))
+    {
+        @Html.HiddenFor(x => x.Person.Id)
+        <td>@Html.TextBoxFor(x => x.NewEmailAddress, new { Placeholder = "Add Email" })</td>
+        <td><button type="submit" value="Submit"> Add! </button></td>
+    }
+
+
+    @using (Html.BeginForm("AddContact", "Database", FormMethod.Post))
+    {
+        @Html.HiddenFor(x => x.Person.Id)
+        <td>@Html.TextBoxFor(x => x.NewPhoneNumber, new { Placeholder = "Add Phone Number" })</td>
+        <td><button type="submit" value="Submit"> Add! </button></td>
+    }
+</tr>
 </table>
