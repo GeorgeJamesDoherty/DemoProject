@@ -11,7 +11,7 @@ namespace DemoProject.Services.Services
             var returnList = new List<T>();
             foreach(var entry in customList)
             {
-                if(function(entry) == true)
+                if(function(entry))
                 {
                     returnList.Add(entry);
                 }
