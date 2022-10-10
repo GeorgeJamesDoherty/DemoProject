@@ -31,6 +31,7 @@ namespace DemoProject
             services.AddDbContext<DemoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DemoContext")));
 
             services.AddScoped<DatabaseServices, DatabaseServices>();
+            services.AddScoped<ApiServices, ApiServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

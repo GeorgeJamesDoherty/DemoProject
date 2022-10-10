@@ -1,3 +1,71 @@
-﻿@{
+﻿@model APIIndexModel
+@{
     ViewData["Title"] = "API";
+}
+<style>
+    th, td {
+        border: 1px solid black;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-weight: normal;
+        text-wrap: none;
+    }
+
+    table {
+        overflow-x: scroll;
+    }
+</style>
+<h1> City air purity values </h1>
+<h4>Search for a city:</h4>
+@using (Html.BeginForm("Index", "API", FormMethod.Post))
+{
+    @Html.TextBoxFor(x => x.SelectedCity, new { placeholder = "Start typing a city!" })
+    <button type="submit" value="Submit">Go!</button>
+}
+
+@Html.Partial("Message")
+&nbsp;
+<table>
+    <thead>
+        <tr>
+            <th style="border:none;">  </th>
+            @foreach (var param in Model.Parameters)
+            {
+                <th id="@param.name">@param.displayName</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var location in Model.Locations)
+        {
+            <tr>
+                <td>@location.name</td>
+                @foreach (var param in Model.Parameters)
+                {
+                    @if (location.parameters.FirstOrDefault(x => x.parameter == param.name) != null)
+                    {
+                        <td> @location.parameters.FirstOrDefault(x => x.parameter == param.name).average.Value.ToString("0.00") @param.preferredUnit</td>
+                    }
+                    else
+                    {
+                        <td> - </td>
+
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts{
+    <link rel=" stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $(document).ready(function () {
+        $('#SelectedCity').autocomplete({
+            source: '@Url.Action("AutoCompleteCity", "Api")'
+        });
+    });
+    </script>
 }

@@ -1,4 +1,5 @@
 ﻿using DemoProject.Services.Models;
+using DemoProject.Services.Models.ViewModels;
 using DemoProject.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 

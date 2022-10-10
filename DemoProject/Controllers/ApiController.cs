@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DemoProject.Services.Models.ViewModels;
+using DemoProject.Services.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +11,29 @@ namespace DemoProject.Controllers
     public class ApiController : Controller
     {
 
-        public ApiController()
-        {
+        private readonly ApiServices _apiServices;
 
+        public ApiController(ApiServices apiServices)
+        {
+            _apiServices = apiServices;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var model = _apiServices.Setup();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Index(APIIndexModel apiIndexModel)
+        {
+            var model = _apiServices.Setup(apiIndexModel.SelectedCity);
+            return View(model);
+        }
+
+        public IActionResult AutoCompleteCity(string term)
+        {
+            return Json(_apiServices.AutoCompleteCity(term));
         }
     }
 }
