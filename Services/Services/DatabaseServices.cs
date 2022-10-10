@@ -1,6 +1,7 @@
 ﻿using DemoProject.Services.Data;
 using DemoProject.Services.Data.Tables;
 using DemoProject.Services.Models;
+using DemoProject.Services.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

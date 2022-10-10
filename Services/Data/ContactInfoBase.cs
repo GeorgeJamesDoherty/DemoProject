@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DemoProject.Services.Models
+namespace DemoProject.Services.Data
 {
     public class ContactInfoBase
     {

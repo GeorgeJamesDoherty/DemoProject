@@ -1,4 +1,5 @@
-﻿using DemoProject.Services.Services;
+﻿using DemoProject.Services.Models.ViewModels;
+using DemoProject.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,20 @@ namespace DemoProject.Controllers
 
         public IActionResult Index()
         {
-            _apiServices.Setup();
-            return View();
+            var model = _apiServices.Setup();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Index(APIIndexModel apiIndexModel)
+        {
+            var model = _apiServices.Setup(apiIndexModel.SelectedCity);
+            return View(model);
+        }
+
+        public IActionResult AutoCompleteCity(string term)
+        {
+            return Json(_apiServices.AutoCompleteCity(term));
         }
     }
 }
