@@ -25,6 +25,11 @@
 
 @Html.Partial("Message")
 &nbsp;
+
+@if(!String.IsNullOrEmpty(Model.SelectedCity)){
+    <h4> Showing Results for @Model.SelectedCity:</h4>
+    <br />
+}
 <table>
     <thead>
         <tr>
@@ -33,26 +38,28 @@
             {
                 <th id="@param.name">@param.displayName</th>
             }
+            <th> info </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var location in Model.Locations)
         {
-            <tr>
-                <td>@location.name</td>
-                @foreach (var param in Model.Parameters)
+        <tr>
+            <td>@location.name</td>
+            @foreach (var param in Model.Parameters)
+            {
+                @if (location.parameters.FirstOrDefault(x => x.parameter == param.name) != null)
                 {
-                    @if (location.parameters.FirstOrDefault(x => x.parameter == param.name) != null)
-                    {
-                        <td> @location.parameters.FirstOrDefault(x => x.parameter == param.name).average.Value.ToString("0.00") @param.preferredUnit</td>
-                    }
-                    else
-                    {
-                        <td> - </td>
-
-                    }
+                    <td> @location.parameters.FirstOrDefault(x => x.parameter == param.name).average.Value.ToString("0.00") @param.preferredUnit</td>
                 }
-            </tr>
+                else
+                {
+                    <td> - </td>
+
+                }
+            }
+            <td><a href ="@Url.Action("Detail", "Api", new { locationId = location.id })"> Details </a></td>
+        </tr>
         }
     </tbody>
 </table>

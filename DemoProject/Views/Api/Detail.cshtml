@@ -1,0 +1,74 @@
+﻿@model APIDetailModel
+@{
+    ViewData["Title"] = "API";
+}
+<style>
+    th, td {
+        border: 1px solid black;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-weight: normal;
+        text-wrap: none;
+    }
+
+    table {
+        overflow-x: scroll;
+    }
+</style>
+<h1> City air purity values </h1>
+<h4>Search for a city:</h4>
+@using (Html.BeginForm("Index", "API", FormMethod.Post))
+{
+    @Html.TextBoxFor(x => x.SelectedCity, new { placeholder = "Start typing a city!" })
+    <button type="submit" value="Submit">Go!</button>
+}
+
+@Html.Partial("Message")
+&nbsp;
+<h4>
+    Showing Info for @Model.LocationInfo.First().name
+    @if (!String.IsNullOrEmpty(Model.LocationInfo.First().city)) { 
+    @:, @Model.LocationInfo.First().city
+    }
+</h4>
+<br/>
+<table>
+        <thead>
+            <tr>
+                <th style="border:none;">  </th>
+                <td>Unit</td>
+                <td>Average</td>
+                <td>Most Recent Value</td>
+                <td>Count</td>
+                <td>First Measurement Date</td>
+                <td>Last Measurement Date</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var parameter in Model.LocationInfo.First().parameters)
+            {
+            <tr>
+                <td>@parameter.displayName</td>
+                <td>@parameter.unit</td>
+                <td>@parameter.average.GetValueOrDefault(0.00).ToString("0.00")</td>
+                <td>@parameter.lastValue.GetValueOrDefault(0.00).ToString("0.00")</td>
+                <td>@parameter.count</td>
+                <td>@parameter.firstUpdated.GetValueOrDefault().ToString("dd/MM/yyyy")</td>
+                <td>@parameter.lastUpdated.GetValueOrDefault().ToString("dd/MM/yyyy")</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+
+    @section Scripts{
+        <link rel=" stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+    $(document).ready(function () {
+        $('#SelectedCity').autocomplete({
+            source: '@Url.Action("AutoCompleteCity", "Api")'
+        });
+    });
+        </script>
+    }

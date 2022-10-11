@@ -19,10 +19,8 @@ namespace DemoProject.Services.Services
         //Static list to 'store' values as not to repeat API calls
         public static List<string> cities;
 
-        private readonly DemoContext _demoContext;
-        public ApiServices(DemoContext demoContext)
+        public ApiServices()
         {
-            _demoContext = demoContext;
         }
 
         private T HttpRequest<T>(string resource, List<(string, string)> requestParamters)
@@ -54,15 +52,33 @@ namespace DemoProject.Services.Services
                 (APIConstants.Limit, "20"),
                 (APIConstants.OrderBy, "random")
             };
+
             if (!String.IsNullOrEmpty(city))
             {
-                requestParamters.Add(("city", city.Trim()));
-            };
+                //Get city formatted correctly
+                var FormattedCity = cities.FirstOrDefault(x => x.ToLower().Trim() == city.ToLower());
+                if (!String.IsNullOrEmpty(FormattedCity))
+                {
+                    apiIndexModel.SelectedCity = FormattedCity;
+                    requestParamters.Add(("city", FormattedCity.Trim()));
+                }
+            }
             apiIndexModel.Locations = HttpRequest<LocationsList>(APIConstants.RouteLocations, requestParamters).results;
 
             var locationParams = apiIndexModel.Locations.SelectMany(x => x.parameters.Select(y => y.parameter)).Distinct().ToList();
             apiIndexModel.Parameters = foundParams.Where(x => locationParams.Contains(x.name)).ToList();
             return apiIndexModel;
+        }
+
+        public APIDetailModel DetailSetup(int locationId)
+        {
+            var apiDetailModel = new APIDetailModel();
+            var requestParamters = new List<(string, string)>()
+            {
+                (APIConstants.Limit, "20")
+            };
+            apiDetailModel.LocationInfo = HttpRequest<LocationsList>(APIConstants.RouteLocations + $"/{locationId}", requestParamters).results;
+            return apiDetailModel;
         }
 
         public List<string> AutoCompleteCity(string term)
@@ -77,7 +93,6 @@ namespace DemoProject.Services.Services
                 var cityInfo = HttpRequest<CityInfoList>(APIConstants.RouteCities, requestParamters).results;
                 cities = cityInfo.Select(x => x.city).ToList();
             }
-
             return cities.Where(x => x.ToLower().Contains(term.ToLower())).Take(5).ToList();
         }
 

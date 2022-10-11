@@ -31,6 +31,12 @@ namespace DemoProject.Controllers
             return View(model);
         }
 
+        public IActionResult Detail(int locationId)
+        {
+            var model = _apiServices.DetailSetup(locationId);
+            return View(model);
+        }
+
         public IActionResult AutoCompleteCity(string term)
         {
             return Json(_apiServices.AutoCompleteCity(term));
