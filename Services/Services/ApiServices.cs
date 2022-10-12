@@ -37,7 +37,7 @@ namespace DemoProject.Services.Services
             return responseAsVar;
         }
 
-        public APIIndexModel Setup(string city = "")
+        public APIIndexModel Setup(string city = "", int page = 1, string orderBy = "random")
         {
             var apiIndexModel = new APIIndexModel();
             var requestParamters = new List<(string, string)>()
@@ -50,7 +50,8 @@ namespace DemoProject.Services.Services
             {
                 (APIConstants.CountryId, "GB"),
                 (APIConstants.Limit, "20"),
-                (APIConstants.OrderBy, "random")
+                (APIConstants.OrderBy, orderBy),
+                (APIConstants.Page, page.ToString())
             };
 
             if (!String.IsNullOrEmpty(city))
@@ -64,9 +65,9 @@ namespace DemoProject.Services.Services
                 }
             }
             apiIndexModel.Locations = HttpRequest<LocationsList>(APIConstants.RouteLocations, requestParamters).results;
-
             var locationParams = apiIndexModel.Locations.SelectMany(x => x.parameters.Select(y => y.parameter)).Distinct().ToList();
             apiIndexModel.Parameters = foundParams.Where(x => locationParams.Contains(x.name)).ToList();
+            apiIndexModel.CurrentPage = page;
             return apiIndexModel;
         }
 
@@ -93,7 +94,7 @@ namespace DemoProject.Services.Services
                 var cityInfo = HttpRequest<CityInfoList>(APIConstants.RouteCities, requestParamters).results;
                 cities = cityInfo.Select(x => x.city).ToList();
             }
-            return cities.Where(x => x.ToLower().Contains(term.ToLower())).Take(5).ToList();
+            return cities.Where(x => x.ToLower().Contains(term.ToLower().Trim())).OrderBy(x => x.ToLower().StartsWith(term.ToLower().Trim()) ? 0 : 1).Take(5).ToList();
         }
 
 

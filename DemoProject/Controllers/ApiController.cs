@@ -18,9 +18,9 @@ namespace DemoProject.Controllers
             _apiServices = apiServices;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string city = "", int page = 1, string orderBy = "lastUpdated")
         {
-            var model = _apiServices.Setup();
+            var model = _apiServices.Setup(city, page, orderBy);
             return View(model);
         }
 

@@ -21,5 +21,7 @@ namespace DemoProject.Services.Misc
         public const string OrderBy = "order_by";
 
         public const string CountryId = "country_id";
+
+        public const string Page = "page";
     }
 }

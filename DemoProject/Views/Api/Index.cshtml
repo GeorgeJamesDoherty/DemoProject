@@ -26,7 +26,8 @@
 @Html.Partial("Message")
 &nbsp;
 
-@if(!String.IsNullOrEmpty(Model.SelectedCity)){
+@if (!String.IsNullOrEmpty(Model.SelectedCity))
+{
     <h4> Showing Results for @Model.SelectedCity:</h4>
     <br />
 }
@@ -38,31 +39,49 @@
             {
                 <th id="@param.name">@param.displayName</th>
             }
-            <th> info </th>
+            <th> Info </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var location in Model.Locations)
         {
-        <tr>
-            <td>@location.name</td>
-            @foreach (var param in Model.Parameters)
-            {
-                @if (location.parameters.FirstOrDefault(x => x.parameter == param.name) != null)
+            <tr>
+                <td>@location.name</td>
+                @foreach (var param in Model.Parameters)
                 {
-                    <td> @location.parameters.FirstOrDefault(x => x.parameter == param.name).average.Value.ToString("0.00") @param.preferredUnit</td>
-                }
-                else
-                {
-                    <td> - </td>
+                    @if (location.parameters.FirstOrDefault(x => x.parameter == param.name) != null)
+                    {
+                        <td> @location.parameters.FirstOrDefault(x => x.parameter == param.name).average.Value.ToString("0.00") @param.preferredUnit</td>
+                    }
+                    else
+                    {
+                        <td> - </td>
 
+                    }
                 }
-            }
-            <td><a href ="@Url.Action("Detail", "Api", new { locationId = location.id })"> Details </a></td>
-        </tr>
+                <td><a href="@Url.Action("Detail", "Api", new { locationId = location.id })"> Details </a></td>
+            </tr>
         }
     </tbody>
 </table>
+@if (String.IsNullOrEmpty(Model.SelectedCity))
+{
+    <div style="text-align:right">
+        @if (!(Model.CurrentPage - 1 <= 0))
+        {
+            <a href="@Url.Action("Index", "Api", new { city = Model.SelectedCity, page = Model.CurrentPage - 1 })"> @Html.Raw("<") @*razor cannot parse '<' charater, fails to compile*@ </a>
+            @if (!(Model.CurrentPage - 2 <= 0))
+            {
+                <a href="@Url.Action("Index", "Api", new { city = Model.SelectedCity, page = Model.CurrentPage - 2 })">@(Model.CurrentPage - 2)</a>
+            }
+            <a href="@Url.Action("Index", "Api", new { city = Model.SelectedCity, page = Model.CurrentPage - 1 })">@(Model.CurrentPage - 1)</a>
+        }
+        <b>@Model.CurrentPage</b>
+        <a href="@Url.Action("Index", "Api", new { city = Model.SelectedCity, page = Model.CurrentPage + 1 })">@(Model.CurrentPage + 1)</a>
+        <a href="@Url.Action("Index", "Api", new { city = Model.SelectedCity, page = Model.CurrentPage + 2 })">@(Model.CurrentPage + 2)</a>
+        <a href="@Url.Action("Index", "Api", new { city = Model.SelectedCity, page = Model.CurrentPage + 1 })">></a>
+    </div>
+}
 
 
 @section Scripts{

@@ -15,5 +15,7 @@ namespace DemoProject.Services.Models.ViewModels
         public List<string> Cities { get; set; }
 
         public string SelectedCity { get; set; }
+
+        public int CurrentPage { get; set; }
     }
 }
